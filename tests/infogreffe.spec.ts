@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
     });
 test.describe('Parcours Recherche Infogreffe', () => {
 
-  test('Login, Search enterprise "PAUL", open "SCI SAINT PAUL" and verify "Actes et statuts"', async ({ page }) => {
+  test('Search enterprise "PAUL", open "SCI SAINT PAUL" and verify "Actes et statuts"', async ({ page }) => {
     const infogreffePage = new InfogreffePage(page);
     // 2. LOGIC 
     await infogreffePage.selectAccountIfAppears();
@@ -25,5 +25,18 @@ test.describe('Parcours Recherche Infogreffe', () => {
     await expect(infogreffePage.getSirenLocator()).toBeVisible()
     await expect(infogreffePage.getActesEtStatutsSectionLocator()).toBeVisible();
   });
+  test('Commander Extrait Kbis pour "Carrefour"', async ({ page }) => {
+        const infogreffePage = new InfogreffePage(page);
+  // 1. LOGIC
+      await infogreffePage.selectAccountIfAppears();
+      await infogreffePage.goToKbisDocuments();
+      await infogreffePage.clickOrderKbis();
+      await infogreffePage.searchKbisEnterprise('Carrefour');
+      await infogreffePage.selectCarrefourEnterprise();
+      await infogreffePage.scrollToBottomAndKbis();
+  // 2. ASSERT (Vérifications explicites)
+      await expect(infogreffePage.getCarrefourTitleLocator()).toContainText('CARREFOUR');
+      await expect(infogreffePage.getKbisSectionLocator()).toBeVisible();
+});
 
 });

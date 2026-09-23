@@ -7,8 +7,8 @@ export class InfogreffePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.modal = new InfogreffeModal(page);
-  }
+    this.modal = new InfogreffeModal(page);}
+    //test beforeEach methode
   async navigateTo(): Promise<void> {
     await this.page.goto('/');}
   async acceptCookies(): Promise<void> {
@@ -24,13 +24,13 @@ export class InfogreffePage {
       await this.modal.rememberMeCheckbox.click();}
     await this.modal.submitLoginBtn.click();
     await this.page.waitForLoadState('networkidle');}
+   //Search enterprise "PAUL"...
   async selectAccountIfAppears() {
     try {
       const account = this.modal.accountCards.first();
       if (await account.isVisible({ timeout: 4000 })) {
         await account.click();
-        await this.page.waitForLoadState('networkidle');
-      }
+        await this.page.waitForLoadState('networkidle');}
     } catch (e) {}}
   async clickAndSearch(query: string) {
     await this.modal.searchInput.click();
@@ -52,6 +52,32 @@ async scrollToActesEtStatuts() {
   getSirenLocator(): Locator {
     return this.modal.sirenNumber.first();}
   getActesEtStatutsSectionLocator(): Locator {
-    return this.modal.actesStatutsSection;
-  }
+    return this.modal.actesStatutsSection;}
+  // KBIS Search for Carrefour
+async goToKbisDocuments() {
+  await this.modal.kbisDocumentsMenu.click();
+  await this.page.waitForLoadState('networkidle');}
+async clickOrderKbis() {
+  await this.modal.orderKbisBtn.click();
+  await this.page.waitForLoadState('networkidle');}
+ async searchKbisEnterprise(query: string) {
+  await this.modal.kbisSearchInput.fill(query);
+  await this.modal.kbisSearchInput.press('Enter'); 
+  await this.page.waitForLoadState('networkidle');}
+async selectCarrefourEnterprise() {
+  await this.modal.carrefourResult.waitFor({ state: 'visible', timeout: 10000 });
+  await this.modal.carrefourResult.click();
+  await this.page.waitForLoadState('networkidle');
+  await this.modal.kbisIncontournableSection.scrollIntoViewIfNeeded();}
+async scrollToBottomAndKbis(): Promise<void> {
+  await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await this.page.waitForTimeout(5000); 
+  await this.modal.kbisIncontournableSection.scrollIntoViewIfNeeded();
+  await this.page.waitForTimeout(5000);}
+getCarrefourTitleLocator() {
+  return this.modal.enterpriseTitle;}
+getKbisSectionLocator() {
+  return this.modal.kbisIncontournableSection;}
+
+
 }
